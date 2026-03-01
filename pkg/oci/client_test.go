@@ -121,3 +121,35 @@ func TestMessageManifest_EmptyLayers(t *testing.T) {
 		t.Errorf("desc size = %d, want %d", desc.Size, len(manifestJSON))
 	}
 }
+
+func TestManifestBuilder_EmptyAnnotations(t *testing.T) {
+	b := NewMessageManifest(nil, []ocispec.Descriptor{{Digest: "sha256:x", Size: 1}})
+	manifestJSON, desc, err := b.Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+	var m ocispec.Manifest
+	if err := json.Unmarshal(manifestJSON, &m); err != nil {
+		t.Fatal(err)
+	}
+	if m.ArtifactType != ArtifactTypeMessage {
+		t.Errorf("artifact type = %q", m.ArtifactType)
+	}
+	if desc.Size != int64(len(manifestJSON)) {
+		t.Errorf("desc size = %d, want %d", desc.Size, len(manifestJSON))
+	}
+}
+
+func TestManifestBuilder_SubjectNil(t *testing.T) {
+	b := NewMessageManifest(map[string]string{"k": "v"}, nil)
+	if b.Subject != nil {
+		t.Error("message manifest subject should be nil")
+	}
+	_, desc, err := b.Build()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if desc.Digest.String() == "" {
+		t.Error("expected non-empty digest")
+	}
+}

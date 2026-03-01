@@ -13,12 +13,12 @@ import (
 
 // Exit codes per CLI contract.
 const (
-	ExitSuccess           = 0
-	ExitGenericFailure    = 1
+	ExitSuccess            = 0
+	ExitGenericFailure     = 1
 	ExitVerificationFailed = 2
-	ExitAuthError         = 3
-	ExitProtocolError     = 4
-	ExitNotFound          = 5
+	ExitAuthError          = 3
+	ExitProtocolError      = 4
+	ExitNotFound           = 5
 )
 
 // ExitError carries an exit code for main to use. Only main() may call os.Exit.

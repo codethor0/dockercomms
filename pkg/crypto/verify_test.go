@@ -64,6 +64,52 @@ func TestVerifyBundleBytes_EmptyDigest(t *testing.T) {
 	}
 }
 
+func TestVerifyBundleBytes_InvalidDigestFormat(t *testing.T) {
+	b, err := os.ReadFile("testdata/bundle_v01.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = VerifyBundleBytes(b, "sha256:zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz", "")
+	if err == nil {
+		t.Fatal("expected error for invalid hex digest")
+	}
+}
+
+func TestVerifyBundleBytes_DigestWrongLength(t *testing.T) {
+	b, err := os.ReadFile("testdata/bundle_v01.json")
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = VerifyBundleBytes(b, "sha256:"+hexN(31), "")
+	if err == nil {
+		t.Fatal("expected error for 31-byte digest")
+	}
+	err = VerifyBundleBytes(b, "sha256:"+hexN(33), "")
+	if err == nil {
+		t.Fatal("expected error for 33-byte digest")
+	}
+}
+
+func TestVerifyBundleBytes_TrustedRootPath(t *testing.T) {
+	bundlePath := "testdata/bundle_v01.json"
+	tmp := t.TempDir()
+	badRoot := filepath.Join(tmp, "root.json")
+	if err := os.WriteFile(badRoot, []byte("not valid json"), 0600); err != nil {
+		t.Fatal(err)
+	}
+	b, err := os.ReadFile(bundlePath)
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = VerifyBundleBytes(b, "sha256:"+hex32zeros(), badRoot)
+	if err == nil {
+		t.Fatal("expected error for invalid trusted root")
+	}
+	if strings.Contains(err.Error(), "load bundle") {
+		t.Skip("bundle format not supported")
+	}
+}
+
 func TestVerifyBundleBytes_ValidBundleWrongDigest(t *testing.T) {
 	b, err := os.ReadFile("testdata/bundle_v01.json")
 	if err != nil {
@@ -136,4 +182,3 @@ func hexN(n int) string {
 	}
 	return string(b)
 }
-

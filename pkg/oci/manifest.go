@@ -34,7 +34,7 @@ func NewReceiptManifest(annotations map[string]string) *ManifestBuilder {
 	return &ManifestBuilder{
 		ArtifactType: ArtifactTypeReceipt,
 		Annotations:  annotations,
-		Layers:      nil,
+		Layers:       nil,
 	}
 }
 

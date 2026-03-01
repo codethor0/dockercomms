@@ -18,9 +18,9 @@ func newSendCmd(cfg *config.Config) *cobra.Command {
 		chunkBytes               int64
 		parallel                 int
 		compress                 string
-		ttlSeconds              int
-		sign                    bool
-		cosignPath, identity    string
+		ttlSeconds               int
+		sign                     bool
+		cosignPath, identity     string
 	)
 	cmd := &cobra.Command{
 		Use:   "send <file_path>",
@@ -28,15 +28,15 @@ func newSendCmd(cfg *config.Config) *cobra.Command {
 		Args:  cobra.ExactArgs(1),
 		RunE: func(cmd *cobra.Command, args []string) error {
 			opts := transfer.SendOptions{
-				Repo:        repo,
-				Recipient:   recipient,
-				Session:     session,
-				ChunkBytes:  chunkBytes,
-				Compress:    compress,
-				TTLSeconds:  ttlSeconds,
-				Sign:        sign,
-				CosignPath:  cosignPath,
-				Identity:    identity,
+				Repo:       repo,
+				Recipient:  recipient,
+				Session:    session,
+				ChunkBytes: chunkBytes,
+				Compress:   compress,
+				TTLSeconds: ttlSeconds,
+				Sign:       sign,
+				CosignPath: cosignPath,
+				Identity:   identity,
 			}
 			result, err := transfer.Send(context.Background(), args[0], opts)
 			if err != nil {
@@ -63,7 +63,7 @@ func newSendCmd(cfg *config.Config) *cobra.Command {
 	cmd.Flags().BoolVar(&sign, "sign", true, "Sign artifact")
 	cmd.Flags().StringVar(&cosignPath, "cosign", "cosign", "Path to cosign binary")
 	cmd.Flags().StringVar(&identity, "identity", "", "Identity for keyless signing (also used as sender if --sender not set)")
-	_ = cmd.MarkFlagRequired("repo")   // valid flag names
+	_ = cmd.MarkFlagRequired("repo") // valid flag names
 	_ = cmd.MarkFlagRequired("recipient")
 	return cmd
 }

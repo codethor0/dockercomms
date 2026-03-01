@@ -7,6 +7,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"strings"
 	"testing"
@@ -47,6 +48,22 @@ func (m *mockBundleStoreWithReferrers) Referrers(ctx context.Context, subject oc
 	return fn(m.referrers)
 }
 
+type mockBundleStoreReferrersError struct {
+	*mockBundleStore
+}
+
+func (m *mockBundleStoreReferrersError) Referrers(ctx context.Context, subject ocispec.Descriptor, artifactType string, fn func([]ocispec.Descriptor) error) error {
+	return fmt.Errorf("referrers error")
+}
+
+type mockBundleStoreEmptyReferrers struct {
+	*mockBundleStore
+}
+
+func (m *mockBundleStoreEmptyReferrers) Referrers(ctx context.Context, subject ocispec.Descriptor, artifactType string, fn func([]ocispec.Descriptor) error) error {
+	return fn(nil)
+}
+
 func TestFetchBundleTag_Success(t *testing.T) {
 	hex12 := HexDigest12("sha256:abc123def456789012345678901234567890123456789012345678901234")
 	manifest := ocispec.Manifest{
@@ -81,7 +98,7 @@ func TestFetchBundleForVerify_ReferrersFirst(t *testing.T) {
 	}
 	mock := &mockBundleStoreWithReferrers{
 		mockBundleStore: base,
-		referrers:      []ocispec.Descriptor{{Digest: "sha256:ref1", Size: 100}},
+		referrers:       []ocispec.Descriptor{{Digest: "sha256:ref1", Size: 100}},
 	}
 	ctx := context.Background()
 	b, err := FetchBundleForVerify(ctx, mock, "repo", "sha256:abc123def456789012345678901234567890123456789012345678901234")
@@ -116,6 +133,29 @@ func TestVerifyBundleInProcess_InvalidBundle(t *testing.T) {
 	err := VerifyBundleInProcess([]byte(`{invalid`), "sha256:0000000000000000000000000000000000000000000000000000000000000000", "")
 	if err == nil {
 		t.Fatal("expected error")
+	}
+}
+
+func TestFetchBundleReferrers_EmptyReferrers(t *testing.T) {
+	base := &mockBundleStore{tags: []string{"other-tag"}}
+	mock := &mockBundleStoreEmptyReferrers{mockBundleStore: base}
+	ctx := context.Background()
+	_, err := FetchBundleReferrers(ctx, mock, "repo", "sha256:abc123def456789012345678901234567890123456789012345678901234")
+	if err == nil {
+		t.Fatal("expected error for empty referrers")
+	}
+	if err != nil && !strings.Contains(err.Error(), "no bundle referrers") {
+		t.Errorf("unexpected error: %v", err)
+	}
+}
+
+func TestFetchBundleForVerify_ReferrersError(t *testing.T) {
+	base := &mockBundleStore{tags: []string{"other-tag"}}
+	mock := &mockBundleStoreReferrersError{mockBundleStore: base}
+	ctx := context.Background()
+	_, err := FetchBundleForVerify(ctx, mock, "repo", "sha256:abc123def456789012345678901234567890123456789012345678901234")
+	if err == nil {
+		t.Fatal("expected error when referrers fails and tag fallback finds no bundle")
 	}
 }
 
