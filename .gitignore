@@ -1,0 +1,39 @@
+# Binaries
+dockercomms
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Output
+/out/
+/dist/
+/build/
+
+# Go workspace
+go.work
+go.work.sum
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+*.pem
+*.key
+
+# Coverage
+coverage.out
+coverage.html
+coverage_*.out
