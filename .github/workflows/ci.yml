@@ -16,6 +16,7 @@ jobs:
         uses: actions/setup-go@v5
         with:
           go-version-file: go.mod
+          cache: false
 
       - name: gofmt
         run: |
@@ -37,7 +38,8 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v4
         with:
-          version: latest
+          version: v1.61
+          skip-cache: true
 
       - name: coverage-gate
         run: make coverage-gate
