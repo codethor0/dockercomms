@@ -38,7 +38,7 @@ jobs:
       - name: golangci-lint
         uses: golangci/golangci-lint-action@v4
         with:
-          version: v1.61
+          version: v2.10
           skip-cache: true
 
       - name: coverage-gate
