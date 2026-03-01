@@ -79,6 +79,25 @@ go test -tags=integration -run TestDockerHubTagListing -v ./test/integration/...
 # Expected: exit 0, tag count logged
 ```
 
+## GHCR Integration Test (Scripted)
+
+For non-TTY environments (e.g. Cursor) or when stored creds are invalid:
+
+1. Create a GitHub PAT with `read:packages` and `write:packages`.
+2. Save it (pick one):
+   - `printf '%s' 'ghp_...' > ~/.dockercomms_gh_pat && chmod 600 ~/.dockercomms_gh_pat`
+   - Or `export GH_PAT='ghp_...'`
+3. Set env (or use defaults):
+   - `export DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/OWNER/REPO`
+   - `export DOCKERCOMMS_IT_RECIPIENT=team-b`
+4. Run: `./scripts/login-and-run-integration.sh`
+
+Never paste PAT into issues or logs.
+
+Preflight check (no login): `./scripts/login-and-run-integration.sh --check`
+
+If login shows "denied", purge bad creds: `./scripts/purge-ghcr-creds.sh`
+
 ## Integration Tests (opt-in)
 
 Integration tests are behind `//go:build integration` and skip when env is missing.
