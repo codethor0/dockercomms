@@ -34,13 +34,13 @@ func Ack(ctx context.Context, opts AckOptions) error {
 		return err
 	}
 	ann := map[string]string{
-		"dockercomms.version":        "1.0",
-		"dockercomms.sender":        "unknown",
-		"dockercomms.recipient":     "unknown",
-		"dockercomms.created_at":    time.Now().UTC().Format(time.RFC3339),
-		"dockercomms.ttl_seconds":   "604800",
-		"dockercomms.receipt.for":   opts.For,
-		"dockercomms.receipt.status": opts.Status,
+		"dockercomms.version":          "1.0",
+		"dockercomms.sender":           "unknown",
+		"dockercomms.recipient":        "unknown",
+		"dockercomms.created_at":       time.Now().UTC().Format(time.RFC3339),
+		"dockercomms.ttl_seconds":      "604800",
+		"dockercomms.receipt.for":      opts.For,
+		"dockercomms.receipt.status":   opts.Status,
 		"dockercomms.receipt.verified": strconv.FormatBool(opts.Verified),
 	}
 	if opts.Reason != "" {

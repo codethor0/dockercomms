@@ -13,9 +13,9 @@ import (
 )
 
 var thresholds = map[string]float64{
-	"github.com/codethor0/dockercomms/pkg/crypto":   66,
-	"github.com/codethor0/dockercomms/pkg/transfer": 36,
-	"github.com/codethor0/dockercomms/pkg/oci":       54,
+	"github.com/codethor0/dockercomms/pkg/crypto":   68,
+	"github.com/codethor0/dockercomms/pkg/transfer": 37,
+	"github.com/codethor0/dockercomms/pkg/oci":      54,
 }
 
 func main() {

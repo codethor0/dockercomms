@@ -114,10 +114,10 @@ func Recv(ctx context.Context, opts RecvOptions) (int, error) {
 			}
 		}
 		messages = append(messages, messageInfo{
-			Tag:     tag,
-			Digest:  desc.Digest.String(),
-			Layers:  manifest.Layers,
-			Ann:     manifest.Annotations,
+			Tag:    tag,
+			Digest: desc.Digest.String(),
+			Layers: manifest.Layers,
+			Ann:    manifest.Annotations,
 		})
 		if len(messages) >= opts.Max {
 			break
@@ -317,13 +317,13 @@ func fetchBundle(ctx context.Context, client *oci.Client, digestRef string, repo
 func writeReceipt(ctx context.Context, client *oci.Client, _ string, m messageInfo, verified bool) error {
 	status := "accepted"
 	ann := map[string]string{
-		"dockercomms.version":        "1.0",
-		"dockercomms.sender":         m.Ann["dockercomms.sender"],
-		"dockercomms.recipient":      m.Ann["dockercomms.recipient"],
-		"dockercomms.created_at":     time.Now().UTC().Format(time.RFC3339),
-		"dockercomms.ttl_seconds":    m.Ann["dockercomms.ttl_seconds"],
-		"dockercomms.receipt.for":    m.Digest,
-		"dockercomms.receipt.status": status,
+		"dockercomms.version":          "1.0",
+		"dockercomms.sender":           m.Ann["dockercomms.sender"],
+		"dockercomms.recipient":        m.Ann["dockercomms.recipient"],
+		"dockercomms.created_at":       time.Now().UTC().Format(time.RFC3339),
+		"dockercomms.ttl_seconds":      m.Ann["dockercomms.ttl_seconds"],
+		"dockercomms.receipt.for":      m.Digest,
+		"dockercomms.receipt.status":   status,
 		"dockercomms.receipt.verified": strconv.FormatBool(verified),
 	}
 	builder := oci.NewReceiptManifest(ann)

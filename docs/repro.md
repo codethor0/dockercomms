@@ -102,9 +102,13 @@ DOCKERCOMMS_IT_DH_REPO=docker.io/user/repo \
 
 ## Module Path
 
-Current: `github.com/dockercomms/dockercomms`. If publishing under a different path (e.g. `github.com/codethor0/dockercomms`):
+Current: `github.com/codethor0/dockercomms`.
+
+## Large Payload (256 MiB)
+
+Optional integration test for larger round-trip. Skips unless `DOCKERCOMMS_IT_LARGE_PAYLOAD=1`:
 
 ```bash
-go mod edit -module=github.com/codethor0/dockercomms
-# Then update all import paths in the codebase
+DOCKERCOMMS_IT_LARGE_PAYLOAD=1 DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/user/repo DOCKERCOMMS_IT_RECIPIENT=alice@example.com \
+  go test -tags=integration -run TestGHCRRoundTrip_LargePayload -v ./test/integration/...
 ```

@@ -101,9 +101,9 @@ func Send(ctx context.Context, filePath string, opts SendOptions) (*SendResult, 
 	}
 	annotations := map[string]string{
 		"dockercomms.version":     "1.0",
-		"dockercomms.sender":     sender,
+		"dockercomms.sender":      sender,
 		"dockercomms.recipient":   opts.Recipient,
-		"dockercomms.created_at": now.Format(time.RFC3339),
+		"dockercomms.created_at":  now.Format(time.RFC3339),
 		"dockercomms.ttl_seconds": fmt.Sprintf("%d", opts.TTLSeconds),
 		"dockercomms.message.id":  msgID,
 		"dockercomms.filename":    filename,

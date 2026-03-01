@@ -4,7 +4,7 @@ Reproducible build and verification steps for DockerComms releases.
 
 ## Toolchain
 
-- Go: version pinned in `go.mod` (currently 1.23)
+- Go: version pinned in `go.mod` (minimum supported)
 - CI uses `go-version-file: go.mod` for consistency
 
 Verify local toolchain:
@@ -40,6 +40,9 @@ DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/OWNER/REPO DOCKERCOMMS_IT_RECIPIENT=alice@examp
 
 # Docker Hub tag listing
 DOCKERCOMMS_IT_DH_REPO=docker.io/USERNAME/REPO go test -tags=integration -run TestDockerHubTagListing ./test/integration/...
+
+# Large payload (256 MiB) round-trip; requires DOCKERCOMMS_IT_LARGE_PAYLOAD=1
+DOCKERCOMMS_IT_LARGE_PAYLOAD=1 DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/OWNER/REPO DOCKERCOMMS_IT_RECIPIENT=alice@example.com go test -tags=integration -run TestGHCRRoundTrip_LargePayload ./test/integration/...
 ```
 
 ## Release Provenance Checklist

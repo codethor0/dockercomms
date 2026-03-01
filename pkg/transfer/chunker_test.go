@@ -145,3 +145,33 @@ func TestChunkerChunkFile_Dir(t *testing.T) {
 		t.Fatal("expected error for directory")
 	}
 }
+
+func TestNewChunker_Defaults(t *testing.T) {
+	c := NewChunker(0, "")
+	if c.ChunkBytes != DefaultChunkBytes {
+		t.Errorf("ChunkBytes = %d, want %d", c.ChunkBytes, DefaultChunkBytes)
+	}
+	if c.Compress != CompressionGzip {
+		t.Errorf("Compress = %q, want gzip", c.Compress)
+	}
+}
+
+func TestChunker_ExceedsMaxTotalBytes(t *testing.T) {
+	c := NewChunker(1024, CompressionGzip)
+	_, _, err := c.Chunk(bytes.NewReader([]byte("x")), MaxTotalBytes+1)
+	if err == nil {
+		t.Fatal("expected error for exceeding max total bytes")
+	}
+}
+
+func TestChunker_ExceedsMaxChunks(t *testing.T) {
+	c := NewChunker(1, CompressionGzip)
+	data := make([]byte, MaxChunks+1)
+	for i := range data {
+		data[i] = 'x'
+	}
+	_, _, err := c.Chunk(bytes.NewReader(data), int64(len(data)))
+	if err == nil {
+		t.Fatal("expected error for exceeding max chunks")
+	}
+}
