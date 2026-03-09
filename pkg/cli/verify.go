@@ -35,7 +35,7 @@ func newVerifyCmd(cfg *config.Config) *cobra.Command {
 				return &ExitError{Code: ExitProtocolError, Err: fmt.Errorf("unknown bundle mode: %s", bundleMode)}
 			}
 			if err != nil {
-				return &ExitError{Code: ExitNotFound, Err: fmt.Errorf("verify failed: %w", err)}
+				return &ExitError{Code: classifyRecvError(err), Err: fmt.Errorf("verify failed: %w", err)}
 			}
 			if err := transfer.VerifyBundleInProcess(bundleBytes, digest, trustedRoot); err != nil {
 				return &ExitError{Code: ExitVerificationFailed, Err: fmt.Errorf("verification failed: %w", err)}

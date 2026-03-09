@@ -35,7 +35,7 @@ func newRecvCmd(cfg *config.Config) *cobra.Command {
 			}
 			count, err := transfer.Recv(context.Background(), opts)
 			if err != nil {
-				return &ExitError{Code: ExitVerificationFailed, Err: fmt.Errorf("recv failed: %w", err)}
+				return &ExitError{Code: classifyRecvError(err), Err: fmt.Errorf("recv failed: %w", err)}
 			}
 			if cfg.JSON {
 				fmt.Printf(`{"received":%d}`+"\n", count)

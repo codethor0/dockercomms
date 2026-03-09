@@ -47,14 +47,18 @@ func FuzzSanitizeFilename_NoTraversal(f *testing.F) {
 	f.Add("file.txt")
 	f.Add("/path/to/file")
 	f.Add("../../../etc/passwd")
+	f.Add("..\\evil.txt")
 	f.Add("")
 	f.Fuzz(func(t *testing.T, path string) {
 		got := SanitizeFilename(path)
-		if strings.Contains(got, "..") || strings.Contains(got, "/") {
-			t.Errorf("SanitizeFilename(%q) = %q, contains traversal", path, got)
+		if strings.Contains(got, "/") {
+			t.Errorf("SanitizeFilename(%q) = %q, must not contain slash", path, got)
 		}
-		if got == "" {
-			t.Errorf("SanitizeFilename must not return empty")
+		if strings.Contains(got, "\\") {
+			t.Errorf("SanitizeFilename(%q) = %q, must not contain backslash", path, got)
+		}
+		if got == ".." || got == "" {
+			t.Errorf("SanitizeFilename(%q) = %q, must not be .. or empty", path, got)
 		}
 	})
 }
