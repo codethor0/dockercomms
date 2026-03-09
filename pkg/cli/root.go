@@ -6,6 +6,7 @@ package cli
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/codethor0/dockercomms/pkg/config"
 	"github.com/spf13/cobra"
@@ -41,6 +42,25 @@ func ExitCode(err error) int {
 	var e *ExitError
 	if errors.As(err, &e) {
 		return e.Code
+	}
+	return ExitGenericFailure
+}
+
+// classifyRecvError returns the exit code for a recv error per the CLI contract.
+func classifyRecvError(err error) int {
+	for e := err; e != nil; e = errors.Unwrap(e) {
+		msg := e.Error()
+		if strings.Contains(msg, "verification failed") {
+			return ExitVerificationFailed
+		}
+		if strings.Contains(msg, "denied") || strings.Contains(msg, "unauthorized") ||
+			strings.Contains(msg, "403") || strings.Contains(msg, "401") ||
+			strings.Contains(msg, "authentication required") {
+			return ExitAuthError
+		}
+		if strings.Contains(msg, "bundle not found") || strings.Contains(msg, "not found") {
+			return ExitNotFound
+		}
 	}
 	return ExitGenericFailure
 }

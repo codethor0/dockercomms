@@ -19,6 +19,12 @@ func TestSanitizeFilename(t *testing.T) {
 		{"", "file"},
 		{"  ", "file"},
 		{"../../../etc/passwd", "passwd"},
+		{"/", "file"},
+		{"//", "file"},
+		{"..\\evil.txt", "..evil.txt"},
+		{"..\\\\..\\\\evil.txt", "....evil.txt"},
+		{"/absolute/path/like.txt", "like.txt"},
+		{"  spaces  .txt  ", "spaces  .txt"},
 	}
 	for _, tt := range tests {
 		got := SanitizeFilename(tt.in)

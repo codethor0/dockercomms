@@ -40,7 +40,7 @@ func newSendCmd(cfg *config.Config) *cobra.Command {
 			}
 			result, err := transfer.Send(context.Background(), args[0], opts)
 			if err != nil {
-				return &ExitError{Code: ExitGenericFailure, Err: fmt.Errorf("send failed: %w", err)}
+				return &ExitError{Code: classifyRecvError(err), Err: fmt.Errorf("send failed: %w", err)}
 			}
 			if cfg.JSON {
 				fmt.Printf(`{"digest":"%s","tag":"%s","bundle":"%s"}`+"\n", result.Digest, result.Tag, result.Bundle)

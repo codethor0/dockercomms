@@ -13,7 +13,10 @@ import (
 func SanitizeFilename(path string) string {
 	base := filepath.Base(path)
 	base = strings.TrimSpace(base)
-	if base == "" || base == "." || base == ".." {
+	// Strip backslash (Windows separator); filepath.Base on Unix does not split on backslash
+	base = strings.ReplaceAll(base, "\\", "")
+	// filepath.Base("/") and filepath.Base("//") return "/" on Unix
+	if base == "" || base == "." || base == ".." || base == "/" {
 		return "file"
 	}
 	return base
