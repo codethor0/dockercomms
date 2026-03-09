@@ -79,24 +79,44 @@ go test -tags=integration -run TestDockerHubTagListing -v ./test/integration/...
 # Expected: exit 0, tag count logged
 ```
 
-## GHCR Integration Test (Scripted)
+## GHCR Integration Test (Scripted) — Fast path
 
-For non-TTY environments (e.g. Cursor) or when stored creds are invalid:
+1. Create a GitHub PAT with `read:packages` and `write:packages`. If org uses SSO, authorize the token.
+2. Run (pick one path):
 
-1. Create a GitHub PAT with `read:packages` and `write:packages`.
-2. Save it (pick one):
-   - `printf '%s' 'ghp_...' > ~/.dockercomms_gh_pat && chmod 600 ~/.dockercomms_gh_pat`
-   - Or `export GH_PAT='ghp_...'`
-3. Set env (or use defaults):
-   - `export DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/OWNER/REPO`
-   - `export DOCKERCOMMS_IT_RECIPIENT=team-b`
-4. Run: `./scripts/login-and-run-integration.sh`
+**Path A — env vars:**
+
+```bash
+export DOCKERCOMMS_IT_GHCR_REPO="ghcr.io/OWNER/REPO"
+export DOCKERCOMMS_IT_RECIPIENT="team-b"
+export GH_USER="codethor0"
+export GH_PAT="ghp_..."
+
+# If login previously failed with "denied":
+./scripts/purge-ghcr-creds.sh
+
+./scripts/login-and-run-integration.sh
+```
+
+**Path B — PAT file:**
+
+```bash
+printf '%s' 'ghp_...' > ~/.dockercomms_gh_pat
+chmod 600 ~/.dockercomms_gh_pat
+
+export DOCKERCOMMS_IT_GHCR_REPO="ghcr.io/OWNER/REPO"
+export DOCKERCOMMS_IT_RECIPIENT="team-b"
+
+./scripts/login-and-run-integration.sh
+```
 
 Never paste PAT into issues or logs.
 
-Preflight check (no login): `./scripts/login-and-run-integration.sh --check`
+**Dry-run (no login):** `./scripts/login-and-run-integration.sh --check`
 
-If login shows "denied", purge bad creds: `./scripts/purge-ghcr-creds.sh`
+**If login shows "denied":** `./scripts/purge-ghcr-creds.sh` then retry.
+
+**If repo has no `:latest` tag:** Set `DOCKERCOMMS_IT_AUTH_TAG` to an existing tag (e.g. `v1.0.0`) so auth proof can verify; otherwise the script prints guidance and proceeds.
 
 ## Integration Tests (opt-in)
 
