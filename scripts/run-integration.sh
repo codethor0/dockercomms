@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 # Run integration tests against GHCR. Requires: docker login ghcr.io first.
+# Exit 3 = auth failure (see login-and-run-integration.sh).
 # Usage: ./scripts/run-integration.sh [--check]
 # Optional env: DOCKERCOMMS_IT_DH_REPO, DOCKERCOMMS_IT_LARGE_PAYLOAD
 set -euo pipefail
@@ -21,11 +22,24 @@ check_mode() {
     echo "  DOCKERCOMMS_IT_LARGE_PAYLOAD=${DOCKERCOMMS_IT_LARGE_PAYLOAD}"
   fi
   echo "[check] Docker daemon..."
-  if docker info >/dev/null 2>&1; then
-    echo "  OK"
-  else
+  if ! docker info >/dev/null 2>&1; then
     echo "  FAIL: Start Docker Desktop"
     exit 1
+  fi
+  echo "  OK"
+  echo "[check] GHCR connectivity..."
+  code=$(curl -sS -o /dev/null -w "%{http_code}" --max-time 10 https://ghcr.io/v2/ 2>/dev/null) || true
+  if [[ "$code" == "401" ]] || [[ "$code" == "405" ]]; then
+    echo "  OK (got $code)"
+  else
+    echo "  FAIL: Cannot reach ghcr.io (got ${code:-timeout})"
+    exit 1
+  fi
+  echo "[check] Auth (best-effort)..."
+  if docker manifest inspect "${DOCKERCOMMS_IT_GHCR_REPO}:latest" >/dev/null 2>&1; then
+    echo "  OK (auth verified)"
+  else
+    echo "  auth not verified (expected if not logged in)"
   fi
   echo "[check] Go test path..."
   if [[ -d "${PROJECT}/test/integration" ]]; then
@@ -48,6 +62,9 @@ main() {
   echo
   echo "== Go =="
   go version
+  echo
+  echo "== Docker =="
+  docker version --format '{{.Client.Version}}' 2>/dev/null || true
   echo
   echo "== Docker daemon check =="
   if ! docker info >/dev/null 2>&1; then
@@ -73,7 +90,15 @@ main() {
   echo
   echo "== Run integration tests =="
   cd "${PROJECT}"
-  go test -tags=integration ./test/integration/... -run Test -count=1 -v -timeout "${GO_TEST_TIMEOUT}"
+  set +e
+  go test -tags=integration ./test/integration/... -run Test -count=1 -v -timeout "${GO_TEST_TIMEOUT}" 2>&1 | tee /tmp/dockercomms_it.out
+  r=${PIPESTATUS[0]}
+  set -e
+  if [[ $r -ne 0 ]] && grep -q "context deadline exceeded" /tmp/dockercomms_it.out 2>/dev/null; then
+    echo ""
+    echo "This is almost certainly missing/invalid GHCR auth; run ./scripts/login-and-run-integration.sh"
+  fi
+  exit $r
 }
 
 main "$@"
