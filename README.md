@@ -177,5 +177,7 @@ DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/user/repo DOCKERCOMMS_IT_RECIPIENT=alice@exampl
 - SPEC.md: protocol specification
 - ARCH.md: implementation architecture
 - RELEASE_CHECKLIST.md: stop-ship gates
+- [SECURITY.md](SECURITY.md): vulnerability reporting (do not use public issues for security bugs)
+- docs/GITHUB-SECURITY-SETUP.md: GitHub Security settings checklist for maintainers
 - .cursor/rules/dockercomms.mdc: Cursor rules for implementation constraints
 - golangci-lint: `golangci-lint run ./...` (errcheck enabled)
