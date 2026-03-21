@@ -1,0 +1,49 @@
+name: Bug report
+description: Something is broken or incorrect
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        For **security vulnerabilities**, do not use this form. Use [SECURITY.md](https://github.com/codethor0/dockercomms/blob/main/SECURITY.md) and private reporting when enabled.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      description: Output of `dockercomms version`, or git tag / SHA.
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, architecture, Go version if building from source.
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: What went wrong?
+    validations:
+      required: true
+  - type: textarea
+    id: repro
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands from a clean state.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Full error output or logs (redact secrets).
+    validations:
+      required: true
