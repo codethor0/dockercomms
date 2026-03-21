@@ -10,6 +10,25 @@ import (
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 )
 
+func TestUsePlainHTTPForReference(t *testing.T) {
+	tests := []struct {
+		ref  string
+		want bool
+	}{
+		{"localhost:5000/myrepo", true},
+		{"127.0.0.1:15000/dockercomms-e2e", true},
+		{"[::1]:5000/foo/bar", true},
+		{"ghcr.io/user/repo", false},
+		{"docker.io/library/alpine", false},
+		{"nohost", false},
+	}
+	for _, tt := range tests {
+		if got := usePlainHTTPForReference(tt.ref); got != tt.want {
+			t.Errorf("usePlainHTTPForReference(%q) = %v, want %v", tt.ref, got, tt.want)
+		}
+	}
+}
+
 func TestEmptyConfigDescriptor(t *testing.T) {
 	if EmptyConfigDescriptor.Digest.String() != "sha256:44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a" {
 		t.Errorf("wrong empty config digest")
