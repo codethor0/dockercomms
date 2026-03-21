@@ -38,6 +38,21 @@ ok  	github.com/dockercomms/dockercomms/test/integration
 - Registry credentials: `docker login ghcr.io` or `docker login` for Docker Hub
 - Env vars set per section below
 
+## Local registry (Docker, no GHCR)
+
+Loopback hosts (`localhost`, `127.0.0.1`, `::1`) use **plain HTTP** against the registry so a local `registry:2` container works without TLS.
+
+```bash
+docker rm -f dockercomms-registry 2>/dev/null || true
+# Use a free host port if 5000 is taken (e.g. -p 15000:5000)
+docker run -d --name dockercomms-registry -p 15000:5000 registry:2
+curl -fsS http://localhost:15000/v2/_catalog
+
+REPO=localhost:15000/my-local-repo
+./dockercomms send --repo "$REPO" --recipient team-a --sign=false /path/to/file
+./dockercomms recv --repo "$REPO" --me team-a --out /tmp/out --verify=false --write-receipt=false
+```
+
 ## GHCR Round-Trip (send -> recv -> verify)
 
 ```bash
