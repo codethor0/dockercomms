@@ -41,6 +41,10 @@ Repository administrators can bypass when **Do not enforce on administrators** i
 - **Release immutability**: Repository or organization **Settings** → Releases / Packages; enable if your plan exposes it.
 - **Projects**: Left enabled by default; ignore or archive if unused.
 
+## Final UI closeout (60 seconds)
+
+See **[GITHUB-UI-FINAL-CHECKLIST.md](GITHUB-UI-FINAL-CHECKLIST.md)** for private vulnerability reporting confirmation and optional release immutability / Projects / auto-merge.
+
 ## Completion checklist
 
 Use this after merging hardening to `main` and workflows have run:
