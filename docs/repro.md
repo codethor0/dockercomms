@@ -40,7 +40,7 @@ ok  	github.com/dockercomms/dockercomms/test/integration
 
 ## Local registry (Docker, no GHCR)
 
-Loopback hosts (`localhost`, `127.0.0.1`, `::1`) use **plain HTTP** against the registry so a local `registry:2` container works without TLS.
+Loopback hosts (`localhost`, `127.0.0.1`, `::1`) and **single-label Docker DNS names** (e.g. `dockercomms-registry:5000` on a user-defined bridge network) use **plain HTTP** so a local `registry:2` works without TLS. Hosts with a dot (e.g. `ghcr.io`) use HTTPS.
 
 ```bash
 docker rm -f dockercomms-registry 2>/dev/null || true
@@ -51,6 +51,16 @@ curl -fsS http://localhost:15000/v2/_catalog
 REPO=localhost:15000/my-local-repo
 ./dockercomms send --repo "$REPO" --recipient team-a --sign=false /path/to/file
 ./dockercomms recv --repo "$REPO" --me team-a --out /tmp/out --verify=false --write-receipt=false
+```
+
+## Linux distro matrix (Docker on host, local registry)
+
+Cross-distro userland check: `registry:2` on `dockercomms-e2e-net`, one container per family, **linux/arm64** binary mounted in (override with `DOCKERCOMMS_DISTRO_PLATFORM=linux/amd64` and a matching `dist/dockercomms-linux-amd64` edit in the script if needed).
+
+```bash
+CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o dist/dockercomms-linux-arm64 ./cmd/dockercomms
+chmod +x dist/dockercomms-linux-arm64
+./scripts/linux-distro-matrix.sh
 ```
 
 ## GHCR Round-Trip (send -> recv -> verify)

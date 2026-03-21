@@ -14,8 +14,9 @@ import (
 	"oras.land/oras-go/v2/registry/remote"
 )
 
-// usePlainHTTPForReference returns true when the registry host is loopback, so a
-// plain-HTTP local registry (e.g. registry:2 on localhost) works without TLS.
+// usePlainHTTPForReference returns true when the registry is expected to speak
+// plain HTTP (local registry:2, loopback, or typical single-label Docker DNS names).
+// Hosts with a dot (e.g. ghcr.io, docker.io) use HTTPS.
 func usePlainHTTPForReference(reference string) bool {
 	idx := strings.Index(reference, "/")
 	if idx <= 0 {
@@ -30,8 +31,12 @@ func usePlainHTTPForReference(reference string) bool {
 	case "localhost", "127.0.0.1", "::1":
 		return true
 	default:
-		return false
 	}
+	// Single-label hostnames: Docker Compose / bridge aliases (e.g. dockercomms-registry).
+	if host != "" && !strings.Contains(host, ".") {
+		return true
+	}
+	return false
 }
 
 // Client wraps oras-go remote repository for OCI operations.

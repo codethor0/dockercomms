@@ -18,6 +18,8 @@ func TestUsePlainHTTPForReference(t *testing.T) {
 		{"localhost:5000/myrepo", true},
 		{"127.0.0.1:15000/dockercomms-e2e", true},
 		{"[::1]:5000/foo/bar", true},
+		{"dockercomms-registry:5000/dockercomms-e2e", true},
+		{"registry:5000/foo", true},
 		{"ghcr.io/user/repo", false},
 		{"docker.io/library/alpine", false},
 		{"nohost", false},
