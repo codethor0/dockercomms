@@ -5,11 +5,11 @@ body:
   - type: markdown
     attributes:
       value: |
-        For **security vulnerabilities**, do not use this form. Use [SECURITY.md](https://github.com/codethor0/dockercomms/blob/main/SECURITY.md) and private reporting when enabled.
+        For **security vulnerabilities**, do not use this form. Use [SECURITY.md](https://github.com/codethor0/dockercomms/blob/main/SECURITY.md) and private vulnerability reporting when enabled.
   - type: input
     id: version
     attributes:
-      label: Version or commit
+      label: Version or tag
       description: Output of `dockercomms version`, or git tag / SHA.
     validations:
       required: true
@@ -18,6 +18,13 @@ body:
     attributes:
       label: Environment
       description: OS, architecture, Go version if building from source.
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Exact command
+      description: The full command line you ran (one or more lines).
     validations:
       required: true
   - type: textarea
@@ -30,8 +37,8 @@ body:
   - type: textarea
     id: repro
     attributes:
-      label: Steps to reproduce
-      description: Exact commands from a clean state.
+      label: Reproduction steps
+      description: Minimal steps from a clean state (files, registry, env vars without secrets).
     validations:
       required: true
   - type: textarea
