@@ -55,12 +55,18 @@ REPO=localhost:15000/my-local-repo
 
 ## Linux distro matrix (Docker on host, local registry)
 
-Cross-distro userland check: `registry:2` on `dockercomms-e2e-net`, one container per family, **linux/arm64** binary mounted in (override with `DOCKERCOMMS_DISTRO_PLATFORM=linux/amd64` and a matching `dist/dockercomms-linux-amd64` edit in the script if needed).
+Cross-distro userland check: `registry:2` on `dockercomms-e2e-net`, one container per family. Default is **linux/arm64**; set `DOCKERCOMMS_DISTRO_PLATFORM=linux/amd64` and build the matching binary for x86_64 coverage.
 
 ```bash
+# arm64 (default on Apple Silicon)
 CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o dist/dockercomms-linux-arm64 ./cmd/dockercomms
 chmod +x dist/dockercomms-linux-arm64
 ./scripts/linux-distro-matrix.sh
+
+# amd64 (e.g. CI or Intel hosts)
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/dockercomms-linux-amd64 ./cmd/dockercomms
+chmod +x dist/dockercomms-linux-amd64
+DOCKERCOMMS_DISTRO_PLATFORM=linux/amd64 ./scripts/linux-distro-matrix.sh
 ```
 
 ## GHCR Round-Trip (send -> recv -> verify)

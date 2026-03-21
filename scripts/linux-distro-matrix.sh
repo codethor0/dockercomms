@@ -9,9 +9,22 @@ cd "$ROOT"
 NET="dockercomms-e2e-net"
 REG_NAME="dockercomms-registry"
 PLATFORM="${DOCKERCOMMS_DISTRO_PLATFORM:-linux/arm64}"
-BIN="$ROOT/dist/dockercomms-linux-arm64"
+case "$PLATFORM" in
+linux/arm64)
+  BIN="$ROOT/dist/dockercomms-linux-arm64"
+  GOARCH_HINT=arm64
+  ;;
+linux/amd64)
+  BIN="$ROOT/dist/dockercomms-linux-amd64"
+  GOARCH_HINT=amd64
+  ;;
+*)
+  echo "unsupported DOCKERCOMMS_DISTRO_PLATFORM=$PLATFORM (use linux/arm64 or linux/amd64)" >&2
+  exit 1
+  ;;
+esac
 if [[ ! -f "$BIN" ]]; then
-  echo "missing $BIN — run: CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o dist/dockercomms-linux-arm64 ./cmd/dockercomms" >&2
+  echo "missing $BIN — run: CGO_ENABLED=0 GOOS=linux GOARCH=${GOARCH_HINT} go build -o dist/dockercomms-linux-${GOARCH_HINT} ./cmd/dockercomms" >&2
   exit 1
 fi
 chmod +x "$BIN" || true
