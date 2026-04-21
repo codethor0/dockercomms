@@ -7,10 +7,37 @@ import (
 	"bytes"
 	"context"
 	"io"
+	"net"
+	"strings"
 
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	"oras.land/oras-go/v2/registry/remote"
 )
+
+// usePlainHTTPForReference returns true when the registry is expected to speak
+// plain HTTP (local registry:2, loopback, or typical single-label Docker DNS names).
+// Hosts with a dot (e.g. ghcr.io, docker.io) use HTTPS.
+func usePlainHTTPForReference(reference string) bool {
+	idx := strings.Index(reference, "/")
+	if idx <= 0 {
+		return false
+	}
+	reg := reference[:idx]
+	host := reg
+	if h, _, err := net.SplitHostPort(reg); err == nil {
+		host = h
+	}
+	switch strings.ToLower(host) {
+	case "localhost", "127.0.0.1", "::1":
+		return true
+	default:
+	}
+	// Single-label hostnames: Docker Compose / bridge aliases (e.g. dockercomms-registry).
+	if host != "" && !strings.Contains(host, ".") {
+		return true
+	}
+	return false
+}
 
 // Client wraps oras-go remote repository for OCI operations.
 type Client struct {
@@ -23,6 +50,9 @@ func NewClient(reference string) (*Client, error) {
 	repo, err := remote.NewRepository(reference)
 	if err != nil {
 		return nil, err
+	}
+	if usePlainHTTPForReference(reference) {
+		repo.PlainHTTP = true
 	}
 	return &Client{repo: repo}, nil
 }
