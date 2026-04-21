@@ -8,14 +8,14 @@ Exact commands for validating DockerComms against real registries. No marketing 
 go version go1.26.0 darwin/arm64
 
 go test ./...
-?   	github.com/dockercomms/dockercomms/cmd/dockercomms	[no test files]
-?   	github.com/dockercomms/dockercomms/internal/tools/covergate	[no test files]
-ok  	github.com/dockercomms/dockercomms/internal/version
-?   	github.com/dockercomms/dockercomms/pkg/cli	[no test files]
-?   	github.com/dockercomms/dockercomms/pkg/config	[no test files]
-ok  	github.com/dockercomms/dockercomms/pkg/crypto
-ok  	github.com/dockercomms/dockercomms/pkg/oci
-ok  	github.com/dockercomms/dockercomms/pkg/transfer
+?   	github.com/codethor0/dockercomms/cmd/dockercomms	[no test files]
+?   	github.com/codethor0/dockercomms/internal/tools/covergate	[no test files]
+ok  	github.com/codethor0/dockercomms/internal/version
+?   	github.com/codethor0/dockercomms/pkg/cli	[no test files]
+?   	github.com/codethor0/dockercomms/pkg/config	[no test files]
+ok  	github.com/codethor0/dockercomms/pkg/crypto
+ok  	github.com/codethor0/dockercomms/pkg/oci
+ok  	github.com/codethor0/dockercomms/pkg/transfer
 
 go test -race ./...
 (all packages ok)
@@ -24,12 +24,12 @@ golangci-lint run ./...
 0 issues.
 
 make coverage-gate
-github.com/dockercomms/dockercomms/pkg/crypto: 66.7% OK
-github.com/dockercomms/dockercomms/pkg/transfer: 36.1% OK
-github.com/dockercomms/dockercomms/pkg/oci: 54.1% OK
+github.com/codethor0/dockercomms/pkg/crypto: 66.7% OK
+github.com/codethor0/dockercomms/pkg/transfer: 36.1% OK
+github.com/codethor0/dockercomms/pkg/oci: 54.1% OK
 
 go test -run Test -tags=integration ./test/integration/...
-ok  	github.com/dockercomms/dockercomms/test/integration
+ok  	github.com/codethor0/dockercomms/test/integration
 ```
 
 ## Prerequisites
@@ -37,6 +37,37 @@ ok  	github.com/dockercomms/dockercomms/test/integration
 - `dockercomms` binary (from `make build`)
 - Registry credentials: `docker login ghcr.io` or `docker login` for Docker Hub
 - Env vars set per section below
+
+## Local registry (Docker, no GHCR)
+
+Loopback hosts (`localhost`, `127.0.0.1`, `::1`) and **single-label Docker DNS names** (e.g. `dockercomms-registry:5000` on a user-defined bridge network) use **plain HTTP** so a local `registry:2` works without TLS. Hosts with a dot (e.g. `ghcr.io`) use HTTPS.
+
+```bash
+docker rm -f dockercomms-registry 2>/dev/null || true
+# Use a free host port if 5000 is taken (e.g. -p 15000:5000)
+docker run -d --name dockercomms-registry -p 15000:5000 registry:2
+curl -fsS http://localhost:15000/v2/_catalog
+
+REPO=localhost:15000/my-local-repo
+./dockercomms send --repo "$REPO" --recipient team-a --sign=false /path/to/file
+./dockercomms recv --repo "$REPO" --me team-a --out /tmp/out --verify=false --write-receipt=false
+```
+
+## Linux distro matrix (Docker on host, local registry)
+
+Cross-distro userland check: `registry:2` on `dockercomms-e2e-net`, one container per family. Default is **linux/arm64**; set `DOCKERCOMMS_DISTRO_PLATFORM=linux/amd64` and build the matching binary for x86_64 coverage.
+
+```bash
+# arm64 (default on Apple Silicon)
+CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -o dist/dockercomms-linux-arm64 ./cmd/dockercomms
+chmod +x dist/dockercomms-linux-arm64
+./scripts/linux-distro-matrix.sh
+
+# amd64 (e.g. CI or Intel hosts)
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o dist/dockercomms-linux-amd64 ./cmd/dockercomms
+chmod +x dist/dockercomms-linux-amd64
+DOCKERCOMMS_DISTRO_PLATFORM=linux/amd64 ./scripts/linux-distro-matrix.sh
+```
 
 ## GHCR Round-Trip (send -> recv -> verify)
 

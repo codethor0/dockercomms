@@ -115,13 +115,14 @@ case "$MODE" in
       sha256sum "$E2E/out/payload.bin" 2>/dev/null || true
       cmp -s "$E2E/payload.bin" "$E2E/out/payload.bin" && echo "OK: payloads match"
 
-      echo "=== 7.3 Verify-failure no-materialize ==="
+      echo "=== 7.3 Verify-failure no-materialize (unsigned: no bundle) ==="
       rm -rf "$E2E/bad" && mkdir -p "$E2E/bad"
       set +e
       ./dockercomms recv --repo "$DOCKERCOMMS_IT_GHCR_REPO" --me "$DOCKERCOMMS_IT_RECIPIENT" --out "$E2E/bad" --verify=true --trusted-root /workspace/testdata/bad-trusted-root.json 2>/dev/null
       REXIT=$?
       set -e
-      echo "recv exit: $REXIT (expect 2)"
+      echo "recv exit: $REXIT (expect 5: bundle not found when --sign=false; exit 2 is for verification failed when a bundle exists)"
+      test "$REXIT" -eq 5
       test ! -f "$E2E/bad/payload.bin" && echo "OK: no output on verify failure"
       ls -la "$E2E/bad" 2>/dev/null || true
 

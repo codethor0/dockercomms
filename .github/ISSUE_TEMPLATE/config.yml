@@ -1,11 +1,11 @@
-blank_issues_enabled: true
+blank_issues_enabled: false
 contact_links:
   - name: Security vulnerability
     url: https://github.com/codethor0/dockercomms/security/advisories/new
-    about: Private reporting (enable under Settings → Code security). If disabled, see SECURITY.md on the default branch.
+    about: Private reporting. If unavailable, read SECURITY.md on the default branch.
   - name: Security policy (read first)
     url: https://github.com/codethor0/dockercomms/blob/main/SECURITY.md
     about: How we handle security reports and scope.
-  - name: Question / discussion
+  - name: Question or discussion
     url: https://github.com/codethor0/dockercomms/discussions
-    about: Usage Q&A via Discussions (enabled for this repo), or open a blank issue.
+    about: Usage Q&A in Discussions, or choose Other if your topic does not fit Bug report or Feature request.

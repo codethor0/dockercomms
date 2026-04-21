@@ -5,8 +5,9 @@ Some settings were applied via the GitHub REST API (repo admin token). Others re
 ## Applied via API (verify in Settings)
 
 - Dependabot security updates: enabled (`dependabot_security_updates`)
+- Dependabot vulnerability alerts: `PUT /repos/{owner}/{repo}/vulnerability-alerts` (204 when enabled)
 - Secret scanning: already enabled; push protection enabled
-- Private vulnerability reporting: sent in `security_and_analysis` PATCH (confirm under Settings → Code security and analysis)
+- Private vulnerability reporting: sent in `security_and_analysis` PATCH (confirm under Settings → Code security and analysis; field may not appear in GET)
 - Wiki: disabled
 - Discussions: enabled
 - Merge commits: disabled; squash and rebase: enabled
@@ -39,6 +40,10 @@ Repository administrators can bypass when **Do not enforce on administrators** i
 - **Dependabot alerts** (vulnerability alerts UI): For many public repos this appears once the dependency graph is active. If the Security tab still shows alerts off, enable **Dependabot alerts** under Code security and analysis.
 - **Release immutability**: Repository or organization **Settings** → Releases / Packages; enable if your plan exposes it.
 - **Projects**: Left enabled by default; ignore or archive if unused.
+
+## Final UI closeout (60 seconds)
+
+See **[GITHUB-UI-FINAL-CHECKLIST.md](GITHUB-UI-FINAL-CHECKLIST.md)** for private vulnerability reporting confirmation and optional release immutability / Projects / auto-merge.
 
 ## Completion checklist
 

@@ -101,7 +101,7 @@ Use these when you want extra assurance that DockerComms behaves the same way in
 
 ## Prerequisites
 
-- Go 1.23+
+- Go 1.25+ (see `go.mod`; CI uses the version declared there)
 - OCI registry (e.g. ghcr.io, Docker Hub, GCR)
 - Registry credentials (docker config or env)
 - Cosign v3 (for signing; keyless OIDC expected)
@@ -179,5 +179,7 @@ DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/user/repo DOCKERCOMMS_IT_RECIPIENT=alice@exampl
 - RELEASE_CHECKLIST.md: stop-ship gates
 - [SECURITY.md](SECURITY.md): vulnerability reporting (do not use public issues for security bugs)
 - docs/GITHUB-SECURITY-SETUP.md: GitHub Security settings checklist for maintainers
+- docs/GITHUB-UI-FINAL-CHECKLIST.md: short UI closeout (private reporting, optional immutability)
+- docs/FINAL-RELEASE-GO-NO-GO.md: status line and remaining items before final tag
 - .cursor/rules/dockercomms.mdc: Cursor rules for implementation constraints
 - golangci-lint: `golangci-lint run ./...` (errcheck enabled)
