@@ -17,7 +17,7 @@ Reference: SPEC.md (protocol), ARCH.md (architecture). This is patent-bound open
 
 ## Code Quality
 
-- Go 1.23+
+- Go 1.25+ (match `go.mod`)
 - gofmt -s compliant
 - NO panic() outside main()
 - NO os.Exit() outside main() (return ExitError; main handles)
