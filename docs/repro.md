@@ -8,14 +8,14 @@ Exact commands for validating DockerComms against real registries. No marketing 
 go version go1.26.0 darwin/arm64
 
 go test ./...
-?   	github.com/dockercomms/dockercomms/cmd/dockercomms	[no test files]
-?   	github.com/dockercomms/dockercomms/internal/tools/covergate	[no test files]
-ok  	github.com/dockercomms/dockercomms/internal/version
-?   	github.com/dockercomms/dockercomms/pkg/cli	[no test files]
-?   	github.com/dockercomms/dockercomms/pkg/config	[no test files]
-ok  	github.com/dockercomms/dockercomms/pkg/crypto
-ok  	github.com/dockercomms/dockercomms/pkg/oci
-ok  	github.com/dockercomms/dockercomms/pkg/transfer
+?   	github.com/codethor0/dockercomms/cmd/dockercomms	[no test files]
+?   	github.com/codethor0/dockercomms/internal/tools/covergate	[no test files]
+ok  	github.com/codethor0/dockercomms/internal/version
+?   	github.com/codethor0/dockercomms/pkg/cli	[no test files]
+?   	github.com/codethor0/dockercomms/pkg/config	[no test files]
+ok  	github.com/codethor0/dockercomms/pkg/crypto
+ok  	github.com/codethor0/dockercomms/pkg/oci
+ok  	github.com/codethor0/dockercomms/pkg/transfer
 
 go test -race ./...
 (all packages ok)
@@ -24,12 +24,12 @@ golangci-lint run ./...
 0 issues.
 
 make coverage-gate
-github.com/dockercomms/dockercomms/pkg/crypto: 66.7% OK
-github.com/dockercomms/dockercomms/pkg/transfer: 36.1% OK
-github.com/dockercomms/dockercomms/pkg/oci: 54.1% OK
+github.com/codethor0/dockercomms/pkg/crypto: 66.7% OK
+github.com/codethor0/dockercomms/pkg/transfer: 36.1% OK
+github.com/codethor0/dockercomms/pkg/oci: 54.1% OK
 
 go test -run Test -tags=integration ./test/integration/...
-ok  	github.com/dockercomms/dockercomms/test/integration
+ok  	github.com/codethor0/dockercomms/test/integration
 ```
 
 ## Prerequisites

@@ -101,7 +101,7 @@ Use these when you want extra assurance that DockerComms behaves the same way in
 
 ## Prerequisites
 
-- Go 1.23+
+- Go 1.25+ (see `go.mod`; CI uses the version declared there)
 - OCI registry (e.g. ghcr.io, Docker Hub, GCR)
 - Registry credentials (docker config or env)
 - Cosign v3 (for signing; keyless OIDC expected)
