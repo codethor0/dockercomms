@@ -13,7 +13,7 @@
 
 - Authenticated **GHCR** integration
 - **Signed** send / `recv --verify=true`
-- **Verification-failure** path returning exit **`2`**
+- **Cryptographic verification failure** (bundle present, signature/policy check fails): exit **`2`** (distinct from **exit `5`** when no bundle exists, e.g. `recv --verify=true` after `--sign=false`)
 
 ## Status lines (quote as-is)
 
@@ -23,7 +23,7 @@
 
 **Full product bar (after local + matrix work):**
 
-> DockerComms is green on host/Docker gates and locally verified (macOS + Linux distro matrices). Final production-style proof is still pending authenticated GHCR and signed verification flows (including verify failure → exit 2).
+> DockerComms is green on host/Docker gates and locally verified (macOS + Linux distro matrices). Final production-style proof is still pending authenticated GHCR and signed verification flows (including verify-with-bundle crypto failure → exit 2).
 
 ## Already satisfied (no action unless regressing)
 
@@ -65,7 +65,7 @@ Checklist (must match your release bar):
 - [ ] `./scripts/docker-e2e.sh cli` — passes
 - [ ] `./scripts/docker-e2e.sh full` — passes (if you require the all-in-one harness)
 - [ ] **Signed** send and **`recv --verify=true`** exercised by those runs (or explicitly documented if split across scripts)
-- [ ] **Verification failure** observed with **exit code `2`** where the product specifies it
+- [ ] **Verification failure** with **exit code `2`** (bundle present, crypto/policy check fails), e.g. after **signed** send; not to be confused with **exit `5`** when no bundle exists
 
 More context and variants: [RELEASE-RUNBOOK.md](RELEASE-RUNBOOK.md)
 
