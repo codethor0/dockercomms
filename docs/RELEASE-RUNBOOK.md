@@ -63,3 +63,21 @@ If all four commands pass, flip from rc to final:
 3. Update release notes to include: "Fully verified end-to-end against live GHCR"
 
 Paste the output for audit; a straight yes/no on flipping to final can be given from the logs.
+
+## Master prompt report hygiene (v8/v9-friendly)
+
+**GA line (§4):** Use **YELLOW** when the GA/attestation track is **incomplete or blocked** (no token, no UI proof, not run) but **nothing in §A/§B was disproven**. Reserve **RED** for that track when your rubric says “not satisfied” *or* when evidence shows a **hard failure** (broken checks, policy violation, falsified claim), not merely “we could not prove it this session.”
+
+**MODE=ALL vs E2E:** If any required E2E sub-step is not executed in that session, label the run **MODE=ALL (partial E2E)** and list each skipped sub-step under **NOT RUN** (or **BLOCKED**) with one reason each. That keeps “MODE=ALL” from reading as “full matrix complete” when only gates + host build ran.
+
+**Shell:** One-liner evidence scripts that rely on `set +e` before a command that may return non-zero should be run under **bash**; **zsh** treats `errexit` differently, so `E1=$?` after a failing command may never run unless `setopt` is adjusted.
+
+**Self-grade (v9 §12):** Lines 3–5 of the six-line block are the **v10 preview**; for strict v9, each of those three lines is **exactly six words** (count at write time; if you cannot meet that, label the block **v9-style six lines** in the report header so audits know).
+
+**Self-grade line 1 (v10 §13):** After `Evidence High|Med|Low:`, the clause is **8 words max** (count after the colon).
+
+**Pristine E2E bar (v10):** For a stop-ship “clean” pass, use an **empty** `git status` before E2E, or **commit/push** doc changes and re-anchor gates on clean `main`—or obtain a **one-line** same-message operator approval for **E2E on a doc-only dirty tree**; otherwise list **B-PROC-1** / procedure risk honestly.
+
+**E2E matrix triage column:** Use **—** or **PRODUCT clean** when the step only succeeded. **B-PROC-1** = operator/procedure (e.g. dirty tree, shell discipline before `bash` fix). **NOT RUN (auth)** = missing `GH_PAT` / credentialed work—not the same as **B-PROC-1**.
+
+**License (CLOSURE):** `gh api repos/.../license` may show `license.key: other` while the root **LICENSE** file is Apache-2.0; one line that **API license metadata ≠ LICENSE file text** prevents audit contradiction.
