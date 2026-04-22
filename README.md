@@ -1,5 +1,8 @@
 # DockerComms
 
+[![CI](https://github.com/codethor0/dockercomms/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/codethor0/dockercomms/actions/workflows/ci.yml?query=branch%3Amain)
+[![CodeQL](https://github.com/codethor0/dockercomms/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/codethor0/dockercomms/actions/workflows/codeql.yml?query=branch%3Amain)
+
 OCI-native secure file transport CLI. Push and pull files as OCI artifacts with signing and verification.
 
 ## What is DockerComms?
