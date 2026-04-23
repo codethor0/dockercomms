@@ -177,7 +177,7 @@ DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/user/repo DOCKERCOMMS_IT_RECIPIENT=alice@exampl
 
 ## Development
 
-- [docs/TESTING-DOCTRINE.md](docs/TESTING-DOCTRINE.md), [docs/EXTREME-TEST-MASTER-PROMPT.md](docs/EXTREME-TEST-MASTER-PROMPT.md) (XT-1), and [docs/EXTREME-TEST-MASTER-PROMPT-XT2.md](docs/EXTREME-TEST-MASTER-PROMPT-XT2.md) (XT-2): testing principles, adversarial plan, and live-Docker execution + anti-summary runs (use the release/GA runbook for closure, not a substitute)
+- [docs/TESTING-DOCTRINE.md](docs/TESTING-DOCTRINE.md), [docs/EXTREME-TEST-MASTER-PROMPT.md](docs/EXTREME-TEST-MASTER-PROMPT.md) (XT-1), [docs/EXTREME-TEST-MASTER-PROMPT-XT2.md](docs/EXTREME-TEST-MASTER-PROMPT-XT2.md) (XT-2), [docs/EXTREME-TEST-MASTER-PROMPT-XT3.md](docs/EXTREME-TEST-MASTER-PROMPT-XT3.md) (XT-3): testing principles, adversarial plan, live-Docker + anti-summary runs, and change-aware / PR merge confidence (use the release/GA runbook for closure, not a substitute)
 - SPEC.md: protocol specification
 - ARCH.md: implementation architecture
 - RELEASE_CHECKLIST.md: stop-ship gates

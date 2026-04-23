@@ -20,6 +20,7 @@
 | [EXTREME-TEST-MASTER-PROMPT.md](EXTREME-TEST-MASTER-PROMPT.md) (XT-1) | Full adversarial plan |
 | **XT-2** (this file) | **Execution** + **Docker-first** + **anti-summary** (first output = shell + real command + real output) |
 | [TESTING-DOCTRINE.md](TESTING-DOCTRINE.md) | Oracle, pyramid, repro bar, bash for NEG |
+| [EXTREME-TEST-MASTER-PROMPT-XT3.md](EXTREME-TEST-MASTER-PROMPT-XT3.md) (XT-3) | **Change-aware** + PR/merge + optional **fix** loop (after XT-2) |
 
 **“Open Docker in Cursor”** = your machine’s Docker Desktop (or a Dev Container with the Docker socket). The agent runs `docker` in the **terminal**; there is no separate “Cursor-only Docker” unless you configure Dev Containers or a remote. XT-2 expects the same `docker` CLI as a normal shell.
 
@@ -96,4 +97,5 @@ Change `CODE_CHANGES_ALLOWED=yes` only when you want the agent to land fixes; ke
 
 - [TESTING-DOCTRINE.md](TESTING-DOCTRINE.md)
 - [EXTREME-TEST-MASTER-PROMPT.md](EXTREME-TEST-MASTER-PROMPT.md) (XT-1)
+- [EXTREME-TEST-MASTER-PROMPT-XT3.md](EXTREME-TEST-MASTER-PROMPT-XT3.md) (XT-3) — next: change-aware + PR confidence
 - [RELEASE-RUNBOOK.md](RELEASE-RUNBOOK.md) (v11 / operator GA)
