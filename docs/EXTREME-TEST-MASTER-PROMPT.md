@@ -83,4 +83,5 @@ This file is the canonical copy of the prompt on disk. Nothing “syncs” to Gi
 - **`docs/EXTREME-TEST-MASTER-PROMPT-XT3.md`** (XT-3) — change-aware matrix, PR checks, optional fix loop; after XT-2.
 - **`docs/EXTREME-TEST-MASTER-PROMPT-XT4.md`** (XT-4) — evidence tables, triage, honesty line.
 - **`docs/EXTREME-TEST-MASTER-PROMPT-XT5.md`** (XT-5) — GATE 0.1 Docker first, `STATIC_ONLY`, `DOCKER_REQUIRED`, `ON_MAIN` / `MERGE_SHA`.
+- **`docs/EXTREME-TEST-MASTER-PROMPT-XT6.md`** (XT-6) — mirror `ci.yml` steps locally; CodeQL note; optional `RC_BUNDLE`, `act`.
 - **`docs/RELEASE-RUNBOOK.md`** — operator closure, GA, NOT RUN.

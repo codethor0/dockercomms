@@ -26,5 +26,5 @@ Short, reusable. Operator closure / GA evidence uses **`docs/RELEASE-RUNBOOK.md`
 
 ## Related
 
-- Adversarial / extreme QA: **`docs/EXTREME-TEST-MASTER-PROMPT.md`** (XT-1); live Docker + anti-summary: **`docs/EXTREME-TEST-MASTER-PROMPT-XT2.md`** (XT-2); change-aware / PR: **`docs/EXTREME-TEST-MASTER-PROMPT-XT3.md`** (XT-3); evidence handoff + tables: **`docs/EXTREME-TEST-MASTER-PROMPT-XT4.md`** (XT-4); preflight Docker + **STATIC_ONLY** / **ON_MAIN**: **`docs/EXTREME-TEST-MASTER-PROMPT-XT5.md`** (XT-5).
+- Adversarial / extreme QA: **`docs/EXTREME-TEST-MASTER-PROMPT.md`** (XT-1); live Docker + anti-summary: **`docs/EXTREME-TEST-MASTER-PROMPT-XT2.md`** (XT-2); change-aware / PR: **`docs/EXTREME-TEST-MASTER-PROMPT-XT3.md`** (XT-3); evidence handoff + tables: **`docs/EXTREME-TEST-MASTER-PROMPT-XT4.md`** (XT-4); preflight Docker + **STATIC_ONLY** / **ON_MAIN**: **`docs/EXTREME-TEST-MASTER-PROMPT-XT5.md`** (XT-5); **CI workflow parity** + optional RC: **`docs/EXTREME-TEST-MASTER-PROMPT-XT6.md`** (XT-6).
 - Release closure, NOT RUN, GA: **`docs/RELEASE-RUNBOOK.md`**.

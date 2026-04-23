@@ -177,7 +177,7 @@ DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/user/repo DOCKERCOMMS_IT_RECIPIENT=alice@exampl
 
 ## Development
 
-- [docs/TESTING-DOCTRINE.md](docs/TESTING-DOCTRINE.md), [docs/EXTREME-TEST-MASTER-PROMPT.md](docs/EXTREME-TEST-MASTER-PROMPT.md) (XT-1) through [docs/EXTREME-TEST-MASTER-PROMPT-XT5.md](docs/EXTREME-TEST-MASTER-PROMPT-XT5.md) (XT-5): testing principles, adversarial and live-Docker runs, change-aware / PR, evidence handoff (XT-4), preflight Docker and static-only flags (XT-5) (use the release/GA runbook for closure, not a substitute)
+- [docs/TESTING-DOCTRINE.md](docs/TESTING-DOCTRINE.md), [docs/EXTREME-TEST-MASTER-PROMPT.md](docs/EXTREME-TEST-MASTER-PROMPT.md) (XT-1) through [docs/EXTREME-TEST-MASTER-PROMPT-XT6.md](docs/EXTREME-TEST-MASTER-PROMPT-XT6.md) (XT-6): testing ladder including CI workflow parity and optional RC bundle (XT-6) (use the release/GA runbook for closure, not a substitute)
 - SPEC.md: protocol specification
 - ARCH.md: implementation architecture
 - RELEASE_CHECKLIST.md: stop-ship gates

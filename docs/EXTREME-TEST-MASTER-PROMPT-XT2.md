@@ -24,6 +24,7 @@
 | [EXTREME-TEST-MASTER-PROMPT-XT3.md](EXTREME-TEST-MASTER-PROMPT-XT3.md) (XT-3) | **Change-aware** + PR/merge + optional **fix** loop (after XT-2) |
 | [EXTREME-TEST-MASTER-PROMPT-XT4.md](EXTREME-TEST-MASTER-PROMPT-XT4.md) (XT-4) | Evidence + triage + tables |
 | [EXTREME-TEST-MASTER-PROMPT-XT5.md](EXTREME-TEST-MASTER-PROMPT-XT5.md) (XT-5) | **Preflight** Docker · **STATIC_ONLY** / **DOCKER_REQUIRED** · main@merge |
+| [EXTREME-TEST-MASTER-PROMPT-XT6.md](EXTREME-TEST-MASTER-PROMPT-XT6.md) (XT-6) | **CI parity** + optional **RC** / **`act`** |
 
 **“Open Docker in Cursor”** = your machine’s Docker Desktop (or a Dev Container with the Docker socket). The agent runs `docker` in the **terminal**; there is no separate “Cursor-only Docker” unless you configure Dev Containers or a remote. XT-2 expects the same `docker` CLI as a normal shell.
 
@@ -101,5 +102,5 @@ Change `CODE_CHANGES_ALLOWED=yes` only when you want the agent to land fixes; ke
 - [TESTING-DOCTRINE.md](TESTING-DOCTRINE.md)
 - [EXTREME-TEST-MASTER-PROMPT.md](EXTREME-TEST-MASTER-PROMPT.md) (XT-1)
 - [EXTREME-TEST-MASTER-PROMPT-XT3.md](EXTREME-TEST-MASTER-PROMPT-XT3.md) (XT-3) — change-aware + PR confidence
-- [EXTREME-TEST-MASTER-PROMPT-XT4.md](EXTREME-TEST-MASTER-PROMPT-XT4.md) (XT-4) · [EXTREME-TEST-MASTER-PROMPT-XT5.md](EXTREME-TEST-MASTER-PROMPT-XT5.md) (XT-5)
+- [EXTREME-TEST-MASTER-PROMPT-XT4.md](EXTREME-TEST-MASTER-PROMPT-XT4.md) (XT-4) · [EXTREME-TEST-MASTER-PROMPT-XT5.md](EXTREME-TEST-MASTER-PROMPT-XT5.md) (XT-5) · [EXTREME-TEST-MASTER-PROMPT-XT6.md](EXTREME-TEST-MASTER-PROMPT-XT6.md) (XT-6)
 - [RELEASE-RUNBOOK.md](RELEASE-RUNBOOK.md) (v11 / operator GA)

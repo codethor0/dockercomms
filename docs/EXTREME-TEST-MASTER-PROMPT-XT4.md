@@ -2,7 +2,7 @@
 
 **Version: XT-4** — maximal, **evidence-first** pass: real shell output, no fabricated pass/fail. **Does not** replace [RELEASE-RUNBOOK.md](RELEASE-RUNBOOK.md) (v11) for GA/§A/§B.
 
-**Next step:** [EXTREME-TEST-MASTER-PROMPT-XT5.md](EXTREME-TEST-MASTER-PROMPT-XT5.md) (XT-5) adds **preflight Docker** + **STATIC_ONLY** / **DOCKER_REQUIRED** so you do not spend a long Phase 1 before discovering Docker is down when you needed E2E.
+**Next steps:** [XT-5](EXTREME-TEST-MASTER-PROMPT-XT5.md) (preflight Docker, **STATIC_ONLY** / **DOCKER_REQUIRED**), then [XT-6](EXTREME-TEST-MASTER-PROMPT-XT6.md) (**CI** mirror vs `ci.yml`, optional RC bundle).
 
 ---
 
@@ -43,5 +43,5 @@ Use sections such as:
 
 ## Related
 
-- [TESTING-DOCTRINE.md](TESTING-DOCTRINE.md) · [XT-1](EXTREME-TEST-MASTER-PROMPT.md) · [XT-2](EXTREME-TEST-MASTER-PROMPT-XT2.md) · [XT-5](EXTREME-TEST-MASTER-PROMPT-XT5.md)
+- [TESTING-DOCTRINE.md](TESTING-DOCTRINE.md) · [XT-1](EXTREME-TEST-MASTER-PROMPT.md) · [XT-2](EXTREME-TEST-MASTER-PROMPT-XT2.md) · [XT-5](EXTREME-TEST-MASTER-PROMPT-XT5.md) · [XT-6](EXTREME-TEST-MASTER-PROMPT-XT6.md)
 - [RELEASE-RUNBOOK.md](RELEASE-RUNBOOK.md) (v11 / GA)
