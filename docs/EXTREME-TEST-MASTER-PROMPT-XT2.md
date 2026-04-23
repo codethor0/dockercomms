@@ -9,6 +9,7 @@
 - **“Absolutely no bugs”** is not something any agent or test suite can prove; the strongest defensible claim is **no known failures in the matrix you actually ran**, with logs.
 - **Cursor** can only use Docker if the environment exposes it (Docker Desktop, Linux daemon, or Dev Containers with the socket). The prompt must **fail closed** when Docker is missing.
 - **“Do everything in Docker”** can still need a **host** step (e.g. `docker-e2e` gates may produce a **Linux** binary; **macOS** may need `make clean && make build` for a **Mach-O** host run — see the runbook and this document’s **GATE 0** / **C** / **D** flow).
+- If **`docker info` fails:** label **Phases B–E** of this matrix (and **XT-4** phases that need Docker) **BLOCKED**; **Phase A** (host `gofmt`, `go test`, `vet`, lint, `make coverage-gate`, etc.) can still pass and is **real signal** for Go on the host for that SHA.
 
 ---
 
@@ -39,7 +40,7 @@ ANTI-SUMMARY RULE (HARD)
 - After each phase, **at most 3** sentences of interpretation; then **next** commands.  
 - If you cannot run a step, **one line** `BLOCKED: {reason}` and move on — do not pad.
 DOCKER AVAILABILITY (GATE 0)
-1. `docker info` (or `docker version`) — if **fails**, state **BLOCKED: Docker not available in this environment** and run **only** host `go test` + static checks; **do not** claim “full XT-2” complete.  
+1. `docker info` (or `docker version`) — if **fails**, state **BLOCKED: Docker not available in this environment** and run **only** host `go test` + static checks; **do not** claim “full XT-2” complete. **Explicit:** with Docker down, phases **B–E** (script preflight that needs a daemon, `docker-e2e` gates, local registry, optional GHCR-in-container) are **BLOCKED**; **Phase A** (gofmt, `go vet`, `go test`, race, lint, `make coverage-gate` where applicable) on the **host** can still be **valid** and should be run.  
 2. If **OK**, one line: **Docker: OK** + **context** (e.g. `docker context` name).  
 3. For **E2E in container** (project script): from repo root run `./scripts/docker-e2e.sh gates` (or as documented). If script **fails**, capture **last 100 lines** of output (§8b style).  
 4. **After** any step that overwrites **root** `./dockercomms` with a **Linux** build: `make clean && make build` on **host** + `file` one line — **mandatory** before further **host** CLI tests.

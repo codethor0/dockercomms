@@ -6,6 +6,8 @@ Short, reusable. Operator closure / GA evidence uses **`docs/RELEASE-RUNBOOK.md`
 
 **Pyramid** — Many fast **unit** / **property** tests; some **integration**; few heavy **E2E**; rare **extreme** / chaos runs (expensive, dedicated sessions only).
 
+**Host vs Docker** — If **`docker info` fails**, treat Docker-dependent work (script `--check` that requires a daemon, `docker-e2e` **gates**, local `registry:2`, container GHCR paths) as **BLOCKED**; **host** static + unit Go (`gofmt`, `go test`, `go vet`, lint, coverage) can still be **valid signal** for that checkout (see **XT-2** [GATE 0](EXTREME-TEST-MASTER-PROMPT-XT2.md)).
+
 **Risk order** — Crypto, path safety, auth to registry, "verify before materialize," and **exit-code contracts** before cosmetic UX.
 
 **Repro before label** — No **P1** without **command** + **environment** + **isolation key** (I7 / unique OCI repo) and **first error line**.
