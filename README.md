@@ -177,6 +177,7 @@ DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/user/repo DOCKERCOMMS_IT_RECIPIENT=alice@exampl
 
 ## Development
 
+- [docs/TESTING-DOCTRINE.md](docs/TESTING-DOCTRINE.md) and [docs/EXTREME-TEST-MASTER-PROMPT.md](docs/EXTREME-TEST-MASTER-PROMPT.md): how we test, and the extreme E2E (XT-1) agent prompt (adversarial QA; pair with the release/GA runbook, not a substitute for it)
 - SPEC.md: protocol specification
 - ARCH.md: implementation architecture
 - RELEASE_CHECKLIST.md: stop-ship gates

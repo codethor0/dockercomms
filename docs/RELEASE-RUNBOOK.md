@@ -2,6 +2,8 @@
 
 Use this when you have `GH_PAT` with `read:packages` and `write:packages` and want to complete the live GHCR verification before releasing.
 
+**See also:** [TESTING-DOCTRINE.md](TESTING-DOCTRINE.md) (project testing principles). [EXTREME-TEST-MASTER-PROMPT.md](EXTREME-TEST-MASTER-PROMPT.md) (XT-1) is for adversarial stress runs; it does not replace this document for operator GA / closure evidence.
+
 ## Current status (until live run passes)
 
 > DockerComms is green on all current non-credentialed gates, but live GHCR end-to-end verification is still pending valid package-scoped auth.
