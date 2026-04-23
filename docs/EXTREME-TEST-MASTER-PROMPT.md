@@ -79,4 +79,5 @@ This file is the canonical copy of the prompt on disk. Nothing “syncs” to Gi
 ## Related
 
 - **`docs/TESTING-DOCTRINE.md`** — Part A (short project principles).
+- **`docs/EXTREME-TEST-MASTER-PROMPT-XT2.md`** (XT-2) — live Docker + execution evidence; anti-summary opening; read after XT-1.
 - **`docs/RELEASE-RUNBOOK.md`** — operator closure, GA, NOT RUN.

@@ -24,5 +24,5 @@ Short, reusable. Operator closure / GA evidence uses **`docs/RELEASE-RUNBOOK.md`
 
 ## Related
 
-- Adversarial / extreme QA: **`docs/EXTREME-TEST-MASTER-PROMPT.md`** (XT-1).
+- Adversarial / extreme QA: **`docs/EXTREME-TEST-MASTER-PROMPT.md`** (XT-1); live Docker + anti-summary execution: **`docs/EXTREME-TEST-MASTER-PROMPT-XT2.md`** (XT-2).
 - Release closure, NOT RUN, GA: **`docs/RELEASE-RUNBOOK.md`**.
