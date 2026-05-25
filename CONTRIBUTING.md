@@ -49,6 +49,10 @@ Requires a running Docker daemon.
 
 Do not weaken verify-before-materialize, filename sanitization, chunk limits, or exit-code semantics without discussion. Report vulnerabilities via [SECURITY.md](SECURITY.md), not public issues.
 
+## Commits
+
+Do not add IDE or agent attribution to commit messages (`Co-authored-by: Cursor`, `Made-with: Cursor`, or similar). Maintainers should disable **Commit Attribution** in Cursor (Settings → Agents → Attribution) and run `./scripts/setup-git-hooks.sh` once per clone so tracked hooks strip accidental trailers.
+
 ## Pull requests
 
 Use the PR template checklist. Update user-facing docs when behavior changes.
