@@ -1,189 +1,93 @@
+<p align="center">
+  <img src="docs/assets/dockercomms-logo.svg" alt="DockerComms" width="200" />
+</p>
+
+<p align="center">
+  <strong>OCI-native secure file transport</strong><br />
+  Signed artifacts, registry-native discovery, verify-before-materialize.
+</p>
+
+<p align="center">
+  <a href="https://github.com/codethor0/dockercomms/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://github.com/codethor0/dockercomms/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
+  <a href="https://github.com/codethor0/dockercomms/actions/workflows/codeql.yml?query=branch%3Amain"><img src="https://github.com/codethor0/dockercomms/actions/workflows/codeql.yml/badge.svg?branch=main" alt="CodeQL" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="License" /></a>
+</p>
+
 # DockerComms
 
-[![CI](https://github.com/codethor0/dockercomms/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/codethor0/dockercomms/actions/workflows/ci.yml?query=branch%3Amain)
-[![CodeQL](https://github.com/codethor0/dockercomms/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/codethor0/dockercomms/actions/workflows/codeql.yml?query=branch%3Amain)
+DockerComms is a CLI for moving files through OCI registries you already operate (GHCR, Docker Hub, GCR, and compatible endpoints). Payloads are chunked, tagged, and signed; recipients verify bundles and digests before any file is written to its final path.
 
-OCI-native secure file transport CLI. Push and pull files as OCI artifacts with signing and verification.
+| | |
+|---|---|
+| **Use when** | Registry HTTP(S) is available and you need signed, discoverable transfers with safe write semantics |
+| **Core guarantee** | Verify-before-materialize: failed verification never produces a destination file |
+| **Status** | v1.0.0-rc3 source release ([CHANGELOG.md](CHANGELOG.md)); GA artifacts are a separate maintainer step |
 
-## What is DockerComms?
+## Security properties
 
-DockerComms is an OCI-native secure file transport CLI.
+- **Verify-before-materialize** — payload bytes hit the destination only after bundle verification and digest match
+- **Path hardening** — safe basename only; traversal and size limits enforced
+- **Automation-friendly exits** — `0` ok, `2` verify fail, `3` auth, `4` format, `5` not found, `1` other
 
-Instead of building a new protocol, it uses standard OCI registries (GHCR, Docker Hub, GCR, etc.) to push and pull encrypted, signed payloads as OCI artifacts. It is designed for:
+## Architecture
 
-- Environments where HTTP(S) access to registries already exists
-- Teams that need verify-before-materialize semantics
-- Operators who want strong guarantees against path traversal and archive bombs
-
-Key properties:
-
-- **Verify-before-materialize:** payloads are never written to the final destination until verification succeeds.
-- **Strict path and filename sanitization** (no `../`, no absolute paths, no backslashes).
-- **Clear exit-code taxonomy** so scripts and CI can distinguish auth, verify, not-found, and generic failures.
-
-## Quickstart for Contributors
-
-### How to run tests (local gates)
-
-All standard gates are runnable locally without any registry credentials.
-
-```bash
-# From repo root
-
-# Unit tests
-go test ./...
-
-# Race detector
-go test -race ./...
-
-# Lint (golangci-lint)
-golangci-lint run ./...
-
-# Coverage gate (enforces minimum coverage thresholds)
-make coverage-gate
-
-# Script preflight checks (no network calls)
-./scripts/run-integration.sh --check
-./scripts/login-and-run-integration.sh --check
+```mermaid
+flowchart LR
+  CLI[dockercomms CLI] --> OCI[OCI registry]
+  CLI --> Sig[Sigstore verify]
+  Sig --> CLI
+  OCI --> CLI
 ```
 
-All of these should pass before you open a PR.
+Detailed send, receive, and trust flows: [docs/architecture.md](docs/architecture.md).
 
-### How to run GHCR integration safely (optional)
+## Quickstart
 
-Live GHCR tests are optional and must be run with your own credentials. They are not required for normal development or CI.
-
-**Prerequisites:**
-
-- Docker daemon running (Docker Desktop or equivalent)
-- A GitHub PAT with `read:packages` and `write:packages`
-- A GHCR repo you control, for example:
+**Requirements:** Go 1.25+ (`go.mod`), registry credentials, Cosign v3 for signing.
 
 ```bash
-export GH_USER="your-gh-username"
-export GH_PAT="ghp_...your_token..."
-export DOCKERCOMMS_IT_GHCR_REPO="ghcr.io/${GH_USER}/dockercomms-it"
-export DOCKERCOMMS_IT_RECIPIENT="team-b"
-```
-
-**To run integration tests safely:**
-
-```bash
-cd /path/to/dockercomms
-
-# Optional: check scripts without hitting the network
-./scripts/run-integration.sh --check
-./scripts/login-and-run-integration.sh --check
-
-# Login and run Go integration tests against GHCR
-./scripts/login-and-run-integration.sh
-```
-
-**Security notes:**
-
-- PAT is read from `GH_PAT` or `~/.dockercomms_gh_pat`.
-- Scripts use `set -euo pipefail` and `umask 077` when touching secret files.
-- PAT is never echoed or logged; there is no `set -x` around secret handling.
-- `scripts/purge-ghcr-creds.sh` removes only GHCR-related Docker credentials if you need to recover from a bad login.
-
-### Dockerized E2E harness (optional)
-
-There is a Docker harness that runs the same gates inside a container and can exercise integration and CLI E2E flows.
-
-```bash
-# From repo root
-./scripts/docker-e2e.sh gates        # build + tests + race + lint + coverage inside Docker
-./scripts/docker-e2e.sh integration  # GHCR integration (requires GH_* env and login)
-./scripts/docker-e2e.sh cli          # CLI send/recv/verify E2E flows
-./scripts/docker-e2e.sh full         # gates + integration + CLI
-```
-
-Use these when you want extra assurance that DockerComms behaves the same way in a clean container as it does on your host.
-
----
-
-## Prerequisites
-
-- Go 1.25+ (see `go.mod`; CI uses the version declared there)
-- OCI registry (e.g. ghcr.io, Docker Hub, GCR)
-- Registry credentials (docker config or env)
-- Cosign v3 (for signing; keyless OIDC expected)
-
-## Build
-
-```bash
-go build ./cmd/dockercomms
-# or
+git clone https://github.com/codethor0/dockercomms.git
+cd dockercomms
 make build
+./dockercomms version
 ```
 
-## Run
+**Local registry (no GHCR):**
 
 ```bash
-./dockercomms --help
-./dockercomms send --help
-./dockercomms recv --help
-./dockercomms verify --help
-./dockercomms ack --help
+docker run -d --name dc-reg -p 15000:5000 registry:2
+REPO=localhost:15000/demo
+echo hello > /tmp/payload.txt
+./dockercomms send --repo "$REPO" --recipient team-a --sign=false /tmp/payload.txt
+./dockercomms recv --repo "$REPO" --me team-a --out /tmp/out --verify=false --write-receipt=false
 ```
 
-## Test
+More commands and registry paths: [docs/repro.md](docs/repro.md).
 
-```bash
-go test ./...
-go test -race ./...
-make test
-make test-race
-make coverage-gate
-```
+## Commands
 
-CI: `.github/workflows/ci.yml` enforces build, test, race, lint, coverage-gate.
+| Command | Purpose |
+|---------|---------|
+| `send` | Chunk, upload, tag inbox artifact, sign |
+| `recv` | Discover inbox, verify, reassemble, write safely |
+| `verify` | Check digest against bundle without writing payload |
+| `ack` | Publish receipt artifact |
+| `version` | Build metadata |
 
-Integration tests (opt-in, skip when creds missing):
+**Exit codes:** `0` success, `2` verification failed, `3` auth, `4` format, `5` not found, `1` other.
 
-```bash
-DOCKERCOMMS_IT_GHCR_REPO=ghcr.io/user/repo DOCKERCOMMS_IT_RECIPIENT=alice@example.com go test -tags=integration ./test/integration/...
-```
+## Documentation
 
-## Exit Codes
+| Document | Description |
+|----------|-------------|
+| [SPEC.md](SPEC.md) | Protocol: tags, manifests, limits |
+| [ARCH.md](ARCH.md) | Packages and implementation layout |
+| [docs/architecture.md](docs/architecture.md) | Architecture and Mermaid flow diagrams |
+| [docs/repro.md](docs/repro.md) | Reproducible registry and E2E commands |
+| [RELEASE.md](RELEASE.md) | RC release notes |
+| [SECURITY.md](SECURITY.md) | Vulnerability reporting |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Build, test, and PR checklist |
 
-- 0: success
-- 1: generic failure
-- 2: verification failed
-- 3: registry auth/permission error
-- 4: protocol/format error
-- 5: not found
+## License
 
-## Security Model
-
-- Verify-before-materialize: payload is never written until verification succeeds
-- Defenses: path traversal, zip/tar bombs, resource exhaustion
-- Constant-time comparisons where applicable
-
-## Implementation Notes
-
-### Registry Compatibility
-
-- Tag listing is the primary discovery mechanism (universal support)
-- Referrers API is optional; used only for related artifacts (bundle/receipt), not message discovery
-- If referrers returns 404/unsupported, fallback to tag-based bundle lookup
-- oras-go/v2 (stable) is used; v3 is dev line. Docker config for auth: DOCKER_CONFIG or ~/.docker/config.json
-
-### Docker Hub Fallback
-
-- Docker Hub may have different pagination or rate limits
-- Tag listing is unordered and eventually consistent; deduplicate by message id and digest
-- For Docker Hub (docker.io), use full repo path: docker.io/username/repo
-
-## Development
-
-- [docs/TESTING-DOCTRINE.md](docs/TESTING-DOCTRINE.md) and [docs/EXTREME-TEST-MASTER-PROMPT.md](docs/EXTREME-TEST-MASTER-PROMPT.md): how we test, and the extreme E2E (XT-1) agent prompt (adversarial QA; pair with the release/GA runbook, not a substitute for it)
-- SPEC.md: protocol specification
-- ARCH.md: implementation architecture
-- RELEASE_CHECKLIST.md: stop-ship gates
-- [SECURITY.md](SECURITY.md): vulnerability reporting (do not use public issues for security bugs)
-- docs/GITHUB-SECURITY-SETUP.md: GitHub Security settings checklist for maintainers
-- docs/GITHUB-UI-FINAL-CHECKLIST.md: short UI closeout (private reporting, optional immutability)
-- docs/FINAL-RELEASE-GO-NO-GO.md: status line and remaining items before final tag
-- .cursor/rules/dockercomms.mdc: Cursor rules for implementation constraints
-- golangci-lint: `golangci-lint run ./...` (errcheck enabled)
+Apache-2.0 — see [LICENSE](LICENSE).
