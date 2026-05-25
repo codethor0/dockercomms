@@ -1,8 +1,15 @@
 # Architecture and flows
 
-DockerComms uses standard OCI registries as the transport. Blobs hold chunked payloads; manifests and tags carry metadata; Cosign bundles provide signatures verified before any payload is written to its final path.
+DockerComms treats an OCI registry as the transport plane: content-addressed blobs store chunked payloads, manifests and inbox tags carry metadata, and Cosign-compatible bundles supply signatures. The CLI verifies bundles and digest alignment **before** writing the reassembled file to its destination.
 
-See [ARCH.md](../ARCH.md) for component layout and [SPEC.md](../SPEC.md) for protocol details.
+| Layer | Responsibility |
+|-------|----------------|
+| `pkg/transfer` | Chunking, send/recv, verify-before-materialize |
+| `pkg/oci` | Registry push/pull, tags, referrers fallback |
+| `pkg/crypto` | Sigstore bundle verification |
+| `pkg/cli` | Commands, exit-code mapping |
+
+Implementation detail: [ARCH.md](../ARCH.md). Protocol rules: [SPEC.md](../SPEC.md).
 
 ## High-level architecture
 
