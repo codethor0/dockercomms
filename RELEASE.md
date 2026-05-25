@@ -78,7 +78,7 @@ Negative-case and safety tests:
 - `FuzzSanitizeFilename_NoTraversal`
 - Exit-code classifier tests for `recv`, `verify`, and `send`
 
-The result: under current test, fuzz, and script coverage, there are no known correctness or safety bugs at this tag.
+The result: under the test, fuzz, and script coverage defined for this tag, there are no known failing cases in that matrix.
 
 ---
 
