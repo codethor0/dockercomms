@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.0-rc3] - 2026-03-21
 
-Release candidate toward v1.0.0 final. See `RELEASE.md` and `docs/FINAL-RELEASE-GO-NO-GO.md` for scope and remaining proof.
+Release candidate toward v1.0.0 final. See [RELEASE.md](RELEASE.md) for scope and validation notes.
 
 ### Added
 

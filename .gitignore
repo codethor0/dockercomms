@@ -17,9 +17,10 @@
 go.work
 go.work.sum
 
-# IDE
+# IDE / editor agents
 .idea/
 .vscode/
+.cursor/
 *.swp
 *.swo
 
