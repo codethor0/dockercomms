@@ -1,29 +1,35 @@
 <p align="center">
-  <img src="docs/assets/dockercomms-logo.png" alt="DockerComms" width="160" />
+  <img src="docs/assets/dockercomms-logo.png" alt="DockerComms" width="200" />
+</p>
+
+<p align="center">
+  <strong>OCI-native secure file transport</strong><br />
+  Signed artifacts, registry-native discovery, verify-before-materialize.
+</p>
+
+<p align="center">
+  <a href="https://github.com/codethor0/dockercomms/actions/workflows/ci.yml?query=branch%3Amain"><img src="https://github.com/codethor0/dockercomms/actions/workflows/ci.yml/badge.svg?branch=main" alt="CI" /></a>
+  <a href="https://github.com/codethor0/dockercomms/actions/workflows/codeql.yml?query=branch%3Amain"><img src="https://github.com/codethor0/dockercomms/actions/workflows/codeql.yml/badge.svg?branch=main" alt="CodeQL" /></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache--2.0-blue.svg" alt="License" /></a>
 </p>
 
 # DockerComms
 
-[![CI](https://github.com/codethor0/dockercomms/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/codethor0/dockercomms/actions/workflows/ci.yml?query=branch%3Amain)
-[![CodeQL](https://github.com/codethor0/dockercomms/actions/workflows/codeql.yml/badge.svg?branch=main)](https://github.com/codethor0/dockercomms/actions/workflows/codeql.yml?query=branch%3Amain)
+DockerComms is a CLI for moving files through OCI registries you already operate (GHCR, Docker Hub, GCR, and compatible endpoints). Payloads are chunked, tagged, and signed; recipients verify bundles and digests before any file is written to its final path.
 
-OCI-native secure file transport CLI. Push and pull files as OCI artifacts with signing, verification, and verify-before-materialize semantics.
-
-## What it does
-
-DockerComms moves files through registries you already use (GHCR, Docker Hub, GCR, and other OCI-compatible endpoints). Payloads are chunked, compressed, and published as standard OCI artifacts with strict inbox tagging. Recipients discover messages by tag, verify signatures and digests, then materialize files only after verification succeeds.
-
-**Problem:** ad-hoc file sharing over object storage or custom APIs often skips consistent signing, discovery, and safe write semantics.
-
-**Approach:** reuse OCI distribution, Cosign-compatible bundles, and a small CLI with a fixed exit-code contract for automation.
+| | |
+|---|---|
+| **Use when** | Registry HTTP(S) is available and you need signed, discoverable transfers with safe write semantics |
+| **Core guarantee** | Verify-before-materialize: failed verification never produces a destination file |
+| **Status** | v1.0.0-rc3 source release ([CHANGELOG.md](CHANGELOG.md)); GA artifacts are a separate maintainer step |
 
 ## Security properties
 
-- **Verify-before-materialize:** payload bytes are not written to the destination path until bundle verification and digest checks pass.
-- **Path hardening:** filenames are reduced to a safe basename; traversal and archive-bomb limits apply.
-- **Stable exit codes:** `0` success, `2` verification failed, `3` auth, `4` protocol/format, `5` not found, `1` other (see below).
+- **Verify-before-materialize** — payload bytes hit the destination only after bundle verification and digest match
+- **Path hardening** — safe basename only; traversal and size limits enforced
+- **Automation-friendly exits** — `0` ok, `2` verify fail, `3` auth, `4` format, `5` not found, `1` other
 
-## Architecture (overview)
+## Architecture
 
 ```mermaid
 flowchart LR
@@ -33,30 +39,30 @@ flowchart LR
   OCI --> CLI
 ```
 
-Send, receive, and trust flows are documented with diagrams in [docs/architecture.md](docs/architecture.md).
+Detailed send, receive, and trust flows: [docs/architecture.md](docs/architecture.md).
 
 ## Quickstart
 
-**Requirements:** Go 1.25+ (see `go.mod`), registry credentials, and Cosign v3 for signing workflows.
+**Requirements:** Go 1.25+ (`go.mod`), registry credentials, Cosign v3 for signing.
 
 ```bash
 git clone https://github.com/codethor0/dockercomms.git
 cd dockercomms
 make build
 ./dockercomms version
-./dockercomms send --help
 ```
 
-**Local registry smoke test** (no GHCR):
+**Local registry (no GHCR):**
 
 ```bash
 docker run -d --name dc-reg -p 15000:5000 registry:2
 REPO=localhost:15000/demo
-./dockercomms send --repo "$REPO" --recipient team-a --sign=false /path/to/file
+echo hello > /tmp/payload.txt
+./dockercomms send --repo "$REPO" --recipient team-a --sign=false /tmp/payload.txt
 ./dockercomms recv --repo "$REPO" --me team-a --out /tmp/out --verify=false --write-receipt=false
 ```
 
-Full reproducible commands: [docs/repro.md](docs/repro.md).
+More commands and registry paths: [docs/repro.md](docs/repro.md).
 
 ## Commands
 
@@ -66,35 +72,22 @@ Full reproducible commands: [docs/repro.md](docs/repro.md).
 | `recv` | Discover inbox, verify, reassemble, write safely |
 | `verify` | Check digest against bundle without writing payload |
 | `ack` | Publish receipt artifact |
-| `version` | Print build metadata |
+| `version` | Build metadata |
 
-## Exit codes
-
-| Code | Meaning |
-|------|---------|
-| 0 | Success |
-| 1 | Generic failure |
-| 2 | Verification failed |
-| 3 | Registry auth or permission error |
-| 4 | Protocol or format error |
-| 5 | Not found |
-
-## Release scope
-
-This repository is **source and documentation** for the DockerComms v1.0 line (currently **1.0.0-rc3** per [CHANGELOG.md](CHANGELOG.md)). It is suitable for public review, integration, and operator evaluation. **Final GA** (signed release artifacts, immutable tags, and operator attestation) is a separate maintainer step and is not implied by publishing source alone.
+**Exit codes:** `0` success, `2` verification failed, `3` auth, `4` format, `5` not found, `1` other.
 
 ## Documentation
 
-| Document | Contents |
-|----------|----------|
+| Document | Description |
+|----------|-------------|
 | [SPEC.md](SPEC.md) | Protocol: tags, manifests, limits |
-| [ARCH.md](ARCH.md) | Packages and data paths |
-| [docs/architecture.md](docs/architecture.md) | Mermaid architecture and flow diagrams |
-| [docs/repro.md](docs/repro.md) | Registry and E2E reproduction |
-| [RELEASE.md](RELEASE.md) | Release notes for the current RC |
+| [ARCH.md](ARCH.md) | Packages and implementation layout |
+| [docs/architecture.md](docs/architecture.md) | Architecture and Mermaid flow diagrams |
+| [docs/repro.md](docs/repro.md) | Reproducible registry and E2E commands |
+| [RELEASE.md](RELEASE.md) | RC release notes |
 | [SECURITY.md](SECURITY.md) | Vulnerability reporting |
-| [CONTRIBUTING.md](CONTRIBUTING.md) | Build, test, and PR expectations |
+| [CONTRIBUTING.md](CONTRIBUTING.md) | Build, test, and PR checklist |
 
 ## License
 
-Apache-2.0. See [LICENSE](LICENSE).
+Apache-2.0 — see [LICENSE](LICENSE).
