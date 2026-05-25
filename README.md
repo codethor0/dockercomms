@@ -21,7 +21,7 @@ DockerComms is a CLI for moving files through OCI registries you already operate
 |---|---|
 | **Use when** | Registry HTTP(S) is available and you need signed, discoverable transfers with safe write semantics |
 | **Core guarantee** | Verify-before-materialize: failed verification never produces a destination file |
-| **Status** | v1.0.0-rc3 source release ([CHANGELOG.md](CHANGELOG.md)); GA artifacts are a separate maintainer step |
+| **Status** | v1.0.0-rc4 source release ([CHANGELOG.md](CHANGELOG.md)); final GA requires maintainer §A/§B evidence per [RELEASE.md](RELEASE.md) |
 
 ## Security properties
 
