@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/dockercomms-logo.png" alt="DockerComms" width="200" />
+  <img src="docs/assets/dockercomms-logo.svg" alt="DockerComms" width="200" />
 </p>
 
 <p align="center">
