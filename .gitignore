@@ -47,5 +47,8 @@ LIVE_E2E_EVIDENCE.md
 DOCKER_E2E_REPORT.md
 docs/RELEASE-E2E-MASTER-PROMPT.md
 
+# Operator-only agent prompts (not for public release branches)
+docs/OPERATOR-RELEASE-MASTER-PROMPT-V3.md
+
 # Local E2E helper (operator runs manually with GH_PAT)
 dockercomms_e2e.sh
