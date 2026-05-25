@@ -1,36 +1,8 @@
-# Reproducible Proof Runs
+# Reproducible proof runs
 
-Exact commands for validating DockerComms against real registries. No marketing language.
+Exact commands for validating DockerComms against real registries.
 
-## Gate Outputs (paste from local run)
-
-```
-go version go1.26.0 darwin/arm64
-
-go test ./...
-?   	github.com/codethor0/dockercomms/cmd/dockercomms	[no test files]
-?   	github.com/codethor0/dockercomms/internal/tools/covergate	[no test files]
-ok  	github.com/codethor0/dockercomms/internal/version
-?   	github.com/codethor0/dockercomms/pkg/cli	[no test files]
-?   	github.com/codethor0/dockercomms/pkg/config	[no test files]
-ok  	github.com/codethor0/dockercomms/pkg/crypto
-ok  	github.com/codethor0/dockercomms/pkg/oci
-ok  	github.com/codethor0/dockercomms/pkg/transfer
-
-go test -race ./...
-(all packages ok)
-
-golangci-lint run ./...
-0 issues.
-
-make coverage-gate
-github.com/codethor0/dockercomms/pkg/crypto: 66.7% OK
-github.com/codethor0/dockercomms/pkg/transfer: 36.1% OK
-github.com/codethor0/dockercomms/pkg/oci: 54.1% OK
-
-go test -run Test -tags=integration ./test/integration/...
-ok  	github.com/codethor0/dockercomms/test/integration
-```
+For standard local gates (unit tests, race, lint, coverage), see [CONTRIBUTING.md](../CONTRIBUTING.md).
 
 ## Prerequisites
 
