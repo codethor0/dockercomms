@@ -192,3 +192,7 @@ More commands and registry paths: [docs/repro.md](docs/repro.md).
 ## License
 
 Apache-2.0 — see [LICENSE](LICENSE).
+
+## Support
+
+If this project is useful to you, you can support its continued development through [GitHub Sponsors](https://github.com/sponsors/codethor0).
